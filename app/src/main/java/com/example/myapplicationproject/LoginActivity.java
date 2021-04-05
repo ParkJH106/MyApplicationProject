@@ -34,13 +34,14 @@ public class LoginActivity extends AppCompatActivity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent( packageContent LoginActivity.this.RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
         });
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // EditText에 현재 입력되어있는 값을 get(가져온다)해온다.
                 String userID = et_id.getText().toString();
                 String userPass = et_pass.getText().toString();
 
@@ -48,28 +49,30 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
+                            // TODO : 인코딩 문제때문에 한글 DB인 경우 로그인 불가
+                            System.out.println("hongchul" + response);
                             JSONObject jsonObject = new JSONObject(response);
-                            boolean success = jsonObject.getBoolean(name:"success");
-                            if(success){//로그인성공
-                                String userID = JSONObject.getString(name:"userID");
-                                String userPass = JSONObject.getString(name:"userPassword");
-                                Toast.makeText(getApplicationContext(),text:"로그인에 성공하였습니다.",Toast.LENGTH_SHORT.show();
-                                Intent intent = new Intent(packageContext LoginActivity.this, MainActivity.class);
-                                intent.putExtra(name:"userID",userID);
-                                intent.putExtra(name:"userPass",userPass);
+                            boolean success = jsonObject.getBoolean("success");
+                            if (success) { // 로그인에 성공한 경우
+                                String userID = jsonObject.getString("userID");
+                                String userPass = jsonObject.getString("userPassword");
+
+                                Toast.makeText(getApplicationContext(),"로그인에 성공하였습니다.",Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                intent.putExtra("userID", userID);
+                                intent.putExtra("userPass", userPass);
                                 startActivity(intent);
-                            }else{//로그인실패
-                                Toast.makeText(getApplicationContext(),text:"로그인에 실패하였습니다.",Toast.LENGTH_SHORT.show();
+                            } else { // 로그인에 실패한 경우
+                                Toast.makeText(getApplicationContext(),"로그인에 실패하였습니다.",Toast.LENGTH_SHORT).show();
                                 return;
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
                 };
-                LoginRequest loginRequest = new LogintRequest(userID, userPass,responseListener);
-                RequestQueue queue = Volley.newRequestQueue(content: LoginActivity.this);
+                LoginRequest loginRequest = new LoginRequest(userID, userPass, responseListener);
+                RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
                 queue.add(loginRequest);
             }
         });

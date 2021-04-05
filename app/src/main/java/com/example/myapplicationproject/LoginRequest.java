@@ -14,7 +14,7 @@ public class LoginRequest extends StringRequest {
     final static private  String URL = "http://~~/Login.php";
     private Map<String,String> map;
 
-    public LoginRequest(String userID, String userPassword, Response.Listener<String> listener, @Nullable Response.ErrorListener errorListener) {
+    public LoginRequest(String userID, String userPassword, Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);
 
         map = new HashMap<>();
