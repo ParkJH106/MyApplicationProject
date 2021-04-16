@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText et_id, et_pass, et_name, et_passcheck;
+    private EditText et_id, et_pass, et_email, et_name, et_passcheck;
     private Button btn_register, check_button;
     private AlertDialog dialog;
     private boolean validate = false;
@@ -31,6 +31,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         et_name = findViewById(R.id.et_name);
         et_id = findViewById(R.id.et_id);
+        et_email = findViewById(R.id.et_email);
         et_pass = findViewById(R.id.et_pass);
         et_passcheck = findViewById(R.id.et_passcheck);
 
@@ -91,6 +92,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //EditText 입력값 get
                 String userName = et_name.getText().toString();
                 String userID = et_id.getText().toString();
+                String userEmail = et_email.getText().toString();
                 String userPass = et_pass.getText().toString();
                 String userPassCheck = et_passcheck.getText().toString();
 
@@ -105,17 +107,31 @@ public class RegisterActivity extends AppCompatActivity {
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+
                         try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean success = jsonObject.getBoolean("success");
-                            if (success) { // 회원등록에 성공한 경우
-                                Toast.makeText(getApplicationContext(),"회원 등록에 성공하였습니다.",Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                            } else { // 회원등록에 실패한 경우
-                                Toast.makeText(getApplicationContext(),"회원 등록에 실패하였습니다.",Toast.LENGTH_SHORT).show();
+                            JSONObject jsonObject = new JSONObject( response );
+                            boolean success = jsonObject.getBoolean( "success" );
+
+                            //회원가입 성공시
+                            if(userPass.equals(userPassCheck)) {
+                                if (success) {
+
+                                    Toast.makeText(getApplicationContext(), String.format("%s님 가입을 환영합니다.", userName), Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+
+                                    //회원가입 실패시
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "회원가입에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            } else {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                dialog = builder.setMessage("비밀번호가 동일하지 않습니다.").setNegativeButton("확인", null).create();
+                                dialog.show();
                                 return;
                             }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -124,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
                 };
 
                 //서버로 Volley를 이용해서 요청
-                RegisterRequest registerRequest = new RegisterRequest( userID, userPass, userName, responseListener);
+                RegisterRequest registerRequest = new RegisterRequest( userName, userEmail, userID, userPass, responseListener);
                 RequestQueue queue = Volley.newRequestQueue( RegisterActivity.this );
                 queue.add( registerRequest );
             }
