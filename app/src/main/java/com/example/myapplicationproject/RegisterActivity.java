@@ -93,11 +93,11 @@ public class RegisterActivity extends AppCompatActivity {
                 String userName = et_name.getText().toString();
                 String userID = et_id.getText().toString();
                 String userEmail = et_email.getText().toString();
-                String userPass = et_pass.getText().toString();
+                String userPassword = et_pass.getText().toString();
                 String userPassCheck = et_passcheck.getText().toString();
 
                 //한 칸이라도 입력 안했을 경우
-                if (userID.equals("") || userPass.equals("") || userName.equals("")) {
+                if (userID.equals("") || userPassword.equals("") || userName.equals("")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                     dialog = builder.setMessage("모두 입력해주세요.").setNegativeButton("확인", null).create();
                     dialog.show();
@@ -113,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity {
                             boolean success = jsonObject.getBoolean( "success" );
 
                             //회원가입 성공시
-                            if(userPass.equals(userPassCheck)) {
+                            if(userPassword.equals(userPassCheck)) {
                                 if (success) {
 
                                     Toast.makeText(getApplicationContext(), String.format("%s님 가입을 환영합니다.", userName), Toast.LENGTH_SHORT).show();
@@ -140,7 +140,7 @@ public class RegisterActivity extends AppCompatActivity {
                 };
 
                 //서버로 Volley를 이용해서 요청
-                RegisterRequest registerRequest = new RegisterRequest( userName, userEmail, userID, userPass, responseListener);
+                RegisterRequest registerRequest = new RegisterRequest( userName, userEmail, userID, userPassword, responseListener);
                 RequestQueue queue = Volley.newRequestQueue( RegisterActivity.this );
                 queue.add( registerRequest );
             }
