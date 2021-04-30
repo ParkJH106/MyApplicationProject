@@ -3,10 +3,14 @@ package com.example.myapplicationproject;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -19,6 +23,10 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity {
     private EditText et_id, et_pass;
     private Button btn_login, btn_register;
+    private CheckBox auto_login_box;
+
+    SharedPreferences setting;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +37,36 @@ public class LoginActivity extends AppCompatActivity {
         et_pass = findViewById(R.id.et_pass);
         btn_login = findViewById(R.id.btn_login);
         btn_register = findViewById(R.id.btn_register);
+        auto_login_box = findViewById(R.id.auto_login_box);
+
+        setting = getSharedPreferences("setting", 0);
+        editor = setting.edit();
+
+        //자동로그인체크박스
+        if(setting.getBoolean("Auto_Login_enabled", false)){
+
+            et_id.setText(setting.getString("userID", ""));
+            et_pass.setText(setting.getString("userPassWord", ""));
+            auto_login_box.setChecked(true);
+        }
+
+        auto_login_box.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+                if(isChecked){
+                    String ID = et_id.getText().toString();
+                    String PW = et_pass.getText().toString();
+                    editor.putString("userID", ID);
+                    editor.putString("userPassWord", PW);
+                    editor.putBoolean("Auto_Login_enabled", true);
+                    editor.commit();
+                }else{
+                    editor.clear();
+                    editor.commit();
+                }
+            }
+        });
 
         //회원가입버튼클릭
         btn_register.setOnClickListener(new View.OnClickListener() {
