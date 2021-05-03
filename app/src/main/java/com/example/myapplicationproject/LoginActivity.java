@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -33,8 +32,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        et_id = findViewById(R.id.et_id);
-        et_pass = findViewById(R.id.et_pass);
+        et_id = findViewById(R.id.login_ID);
+        et_pass = findViewById(R.id.login_PASS);
         btn_login = findViewById(R.id.btn_login);
         btn_register = findViewById(R.id.btn_register);
         auto_login_box = findViewById(R.id.auto_login_box);
