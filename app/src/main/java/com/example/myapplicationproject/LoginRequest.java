@@ -1,5 +1,7 @@
 package com.example.myapplicationproject;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
@@ -14,12 +16,13 @@ public class LoginRequest extends StringRequest {
     final static private  String URL = "https://~~~/login.php";
     private Map<String,String> map;
 
-    public LoginRequest(String userID, String userPassword, Response.Listener<String> listener) {
-        super(Method.POST, URL, listener, null);
+    public LoginRequest(String userID, String userPassword, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        super(Method.POST, URL, listener, errorListener);
 
         map = new HashMap<>();
         map.put("userID", userID);
         map.put("userPassword", userPassword);
+
     }
 
     @Override

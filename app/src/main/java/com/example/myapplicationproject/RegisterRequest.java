@@ -1,5 +1,7 @@
 package com.example.myapplicationproject;
 
+import android.util.Log;
+
 import androidx.annotation.Nullable;
 
 import com.android.volley.AuthFailureError;
@@ -14,8 +16,8 @@ public class RegisterRequest extends StringRequest {
     final static private  String URL = "https://~~~/register.php";
     private Map<String,String> map;
 
-    public RegisterRequest(String userName, String userID, String userPassword, String userEmail, Response.Listener<String> listener) {
-        super(Method.POST, URL, listener, null);
+    public RegisterRequest(String userName, String userID, String userPassword, String userEmail, Response.Listener<String> listener, Response.ErrorListener errorListener) {
+        super(Method.POST, URL, listener, errorListener);
 
         map = new HashMap<>();
         map.put("userName", userName);
@@ -26,7 +28,7 @@ public class RegisterRequest extends StringRequest {
     }
 
     @Override
-    protected Map<String, String>getParams() throws AuthFailureError {
+    protected Map<String, String> getParams() throws AuthFailureError {
         return map;
     }
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
@@ -117,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 if (success) {
 
                                     Toast.makeText(getApplicationContext(), String.format("%s님 가입을 환영합니다.", userName), Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    Intent intent = new Intent(RegisterActivity.this, GmailActivity.class);
                                     startActivity(intent);
 
                                     //회원가입 실패시
@@ -139,11 +140,23 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 };
 
+                if(AppHelper.requestQueue == null)
+                    AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "회원가입 처리시 에러발생!", Toast.LENGTH_SHORT).show();
+                    }
+                };
+
                 //서버로 Volley를 이용해서 요청
-                RegisterRequest registerRequest = new RegisterRequest( userName, userEmail, userID, userPassword, responseListener);
+                RegisterRequest registerRequest = new RegisterRequest( userName, userEmail, userID, userPassword, responseListener, errorListener );
+                registerRequest.setShouldCache(false);
                 RequestQueue queue = Volley.newRequestQueue( RegisterActivity.this );
                 queue.add( registerRequest );
             }
         });
+
     }
 }

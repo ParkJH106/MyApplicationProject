@@ -7,7 +7,7 @@
     tools:context=".LoginActivity">
 
     <EditText
-        android:id="@+id/login_ID"
+        android:id="@+id/login_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/login_PASS"
+        android:id="@+id/login_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -28,7 +28,7 @@
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_ID" />
+        app:layout_constraintTop_toBottomOf="@+id/login_id" />
 
     <Button
         android:id="@+id/btn_login"
@@ -36,9 +36,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="75dp"
         android:text="로그인"
-        app:layout_constraintEnd_toEndOf="@+id/login_PASS"
-        app:layout_constraintStart_toStartOf="@+id/login_PASS"
-        app:layout_constraintTop_toBottomOf="@+id/login_PASS" />
+        app:layout_constraintEnd_toEndOf="@+id/login_pass"
+        app:layout_constraintStart_toStartOf="@+id/login_pass"
+        app:layout_constraintTop_toBottomOf="@+id/login_pass" />
 
     <Button
         android:id="@+id/btn_register"
@@ -70,6 +70,6 @@
         android:text="자동로그인"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_PASS" />
+        app:layout_constraintTop_toBottomOf="@+id/login_pass" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

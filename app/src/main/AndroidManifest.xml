@@ -3,6 +3,7 @@
     package="com.example.myapplicationproject">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -10,8 +11,11 @@
         android:label="My Application Project"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MyApplicationProject">
-        <activity android:name=".BiometricActivity"></activity>
+        android:theme="@style/Theme.MyApplicationProject"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".GmailSender"></activity>
+        <activity android:name=".GmailActivity" />
+        <activity android:name=".BiometricActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
     </application>
 
 </manifest>

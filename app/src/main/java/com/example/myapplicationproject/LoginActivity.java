@@ -14,13 +14,14 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
-    private EditText et_id, et_pass;
+    private EditText login_id, login_pass;
     private Button btn_login, btn_register;
     private CheckBox auto_login_box;
 
@@ -32,8 +33,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        et_id = findViewById(R.id.login_ID);
-        et_pass = findViewById(R.id.login_PASS);
+        login_id = findViewById(R.id.login_id);
+        login_pass = findViewById(R.id.login_pass);
         btn_login = findViewById(R.id.btn_login);
         btn_register = findViewById(R.id.btn_register);
         auto_login_box = findViewById(R.id.auto_login_box);
@@ -44,8 +45,8 @@ public class LoginActivity extends AppCompatActivity {
         //자동로그인체크박스
         if(setting.getBoolean("Auto_Login_enabled", false)){
 
-            et_id.setText(setting.getString("userID", ""));
-            et_pass.setText(setting.getString("userPassWord", ""));
+            login_id.setText(setting.getString("userID", ""));
+            login_pass.setText(setting.getString("userPassWord", ""));
             auto_login_box.setChecked(true);
         }
 
@@ -54,8 +55,8 @@ public class LoginActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // TODO Auto-generated method stub
                 if(isChecked){
-                    String ID = et_id.getText().toString();
-                    String PW = et_pass.getText().toString();
+                    String ID = login_id.getText().toString();
+                    String PW = login_pass.getText().toString();
                     editor.putString("userID", ID);
                     editor.putString("userPassWord", PW);
                     editor.putBoolean("Auto_Login_enabled", true);
@@ -79,8 +80,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // EditText에 현재 입력되어있는 값을 get(가져온다)해온다.
-                String userID = et_id.getText().toString();
-                String userPassword = et_pass.getText().toString();
+                String userID = login_id.getText().toString();
+                String userPassword = login_pass.getText().toString();
 
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
@@ -108,8 +109,20 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 };
-                LoginRequest loginRequest = new LoginRequest(userID, userPassword, responseListener);
+
+                if(AppHelper.requestQueue == null)
+                    AppHelper.requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+                Response.ErrorListener errorListener = new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(getApplicationContext(), "로그인 처리시 에러발생!", Toast.LENGTH_SHORT).show();
+                    }
+                };
+
+                LoginRequest loginRequest = new LoginRequest(userID, userPassword, responseListener, errorListener);
                 RequestQueue queue = Volley.newRequestQueue(LoginActivity.this);
+                loginRequest.setShouldCache(false);
                 queue.add(loginRequest);
             }
         });
